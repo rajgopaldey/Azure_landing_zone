@@ -6,7 +6,6 @@ locals {
     "Environment" = "dev"
   }
 }
-
 module "resource_group" {
   source      = "../../modules/azurerm_resource_group"
   rg_name     = "rg-dev-001"
@@ -23,8 +22,6 @@ module "virtual_network" {
   vnt_address_space = ["10.0.0.0/22"]
   vnt_tags = local.common_tags
 }
-
-
 module "subnet" {
 depends_on = [module.resource_group]
   source = "../../modules/azurerm_subnet"
