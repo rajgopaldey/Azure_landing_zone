@@ -24,14 +24,7 @@ module "virtual_network" {
   vnt_tags = local.common_tags
 }
 
-# module "virtual_network" {
-#   source                  = "../../modules/azurerm_virtual_netork"
-#   vnt_name                = "vnt-dev-001"
-#   vnt_location            = module.resource_group.rg_location # Dependency Link
-#   vnt_resource_group_name = module.resource_group.rg_name     # Dependency Link
-#   vnt_address_space       = ["10.0.0.0/22"]
-#   vnt_tags                = local.common_tags
-# }
+
 module "subnet" {
 depends_on = [module.resource_group]
   source = "../../modules/azurerm_subnet"
