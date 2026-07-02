@@ -1,16 +1,24 @@
+locals {
+  common_tags = {
+    "ManagedBy"   = "Terraform"
+    "Owner"       = "Rajgoapal"
+    "Environment" = "dev"
+  }
+}
+
 module "hub_resource_group" {
-  source = "../../modules/resource_group"
-  rg_name = "rg-hub-002"
+  source = "../../modules/azurerm_resource_group"
+  rg_name = "rg-hub-001"
   rg_location = "central india"
   rg_tags     = local.common_tags
    }
 
 
-module "hub_virtual_netork" {
+module "hub_virtual_network" {
     depends_on = [module.hub_resource_group]
-    source = "..//..//modules/azurerm_virtual_network"
-    vnt_resource_group_name = "rg-hub-002"
-    vnt_name = "vnt-hub-002"
+    source = "../../modules/azurerm_virtual_network"
+    vnt_resource_group_name = "rg-hub-001"
+    vnt_name = "vnt-hub-001"
     vnt_location = "central india"
     vnt_address_space = ["10.1.0.0/22"]
     vnt_tags                = local.common_tags
@@ -21,11 +29,11 @@ module "private_dns" {
   source              = "../../modules/azurerm_private_dns"
   dns_zone_name       = "corp.internal"
   resource_group_name = "rg-hub-network"
-
-  # Hub এবং Spoke দুইটাকেই লুপে ঘোরানোর জন্য ম্যাপ পাস করছেন
   vnet_to_link = {
-    "hub-vnet"   = module.hub_network.vnet_id
-    "spoke-vnet" = module.spoke_network.vnet_id
+    #its we comand to the dns crate the link with hub vnet data from line-17
+    #vnet-id means go to the hub_virtual_network module and get output of vnet_id
+    "hub-vnet"   = module.hub_virtual_network.vnet_id
+   # "spoke-vnet" = module.virtual_network.vnet_id    #spoke vnet like dev
   }
 
   tags = {
@@ -34,7 +42,7 @@ module "private_dns" {
 }
 
 module "azurerm_firewall" {
-  source                 = "../../modules/azurerm_fireall"
+  source = "../../modules/azurerm_firewall"
   
   # আলাদা আলাদা নাম ডিফাইন করছেন এখানে
   pip_name               = "pip-dev-hub-fw"      

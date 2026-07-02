@@ -18,19 +18,3 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnet_links" {
   registration_enabled  = true # true দিলে এই VNet-এর VM-গুলো অটোমেটিক DNS রেকর্ড পেয়ে যাবে
 }
 
-variable "dns_zone_name" {
-  type        = string
-}
-
-variable "resource_group_name" {
-  type        = string
-}
-
-variable "tags" {
-  type    = map(string)
-  default = {}
-}
-
-variable "vnet_to_link" {
-  type = map(string)
-}
