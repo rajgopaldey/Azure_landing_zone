@@ -26,9 +26,10 @@ module "hub_virtual_network" {
 }
 
 module "private_dns" {
+  depends_on          = [module.hub_resource_group, module.hub_virtual_network]
   source              = "../../modules/azurerm_private_dns"
   dns_zone_name       = "corp.internal"
-  resource_group_name = "rg-hub-network"
+  resource_group_name = "rg-hub-001"
   vnet_to_link = {
     #its we comand to the dns crate the link with hub vnet data from line-17
     #vnet-id means go to the hub_virtual_network module and get output of vnet_id
@@ -42,12 +43,11 @@ module "private_dns" {
 }
 
 module "azurerm_firewall" {
+  depends_on             = [module.hub_resource_group, module.hub_virtual_network]
   source = "../../modules/azurerm_firewall"
-  
   pip_name               = "pip-dev-hub-fw"      
   fw_name                = "fw-dev-hub"          
-  
-  fw_location            = "East US"
+  fw_location            = "central india"
   fw_resource_group_name = "rg-hub-001"
   fw_subnet_id           = "/subscriptions/.../subnets/AzureFirewallSubnet"
   tags                   = { Environment = "Dev" }
@@ -55,6 +55,7 @@ module "azurerm_firewall" {
 
 
 module "route_table_dev" { #if trafic want go from dev vnet to hub vnet then it should go to firewall
+  depends_on             = [module.hub_resource_group, module.azurerm_firewall]
   source = "../../modules/azurerm_route_table"
 
   rt_name                = "rt-dev-001"
