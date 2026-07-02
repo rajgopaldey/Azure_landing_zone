@@ -22,9 +22,19 @@ module "hub_virtual_network" {
     vnt_location = "central india"
     vnt_address_space = ["10.1.0.0/22"]
     vnt_tags                = local.common_tags
-
 }
 
+module "hub_subnets" {
+  depends_on          = [module.hub_virtual_network]
+  source              = "../../modules/azurerm_subnet" 
+  resource_group_name = "rg-hub-001"
+  vnet_name           = "vnt-hub-001"
+  subnets = {
+    "AzureFirewallSubnet" = { address_prefix = "10.1.0.0/26" }
+    "AzureBastionSubnet"  = { address_prefix = "10.1.0.64/26" }
+    "GatewaySubnet"       = { address_prefix = "10.1.0.128/26" }
+  }
+}
 module "private_dns" {
   depends_on          = [module.hub_resource_group, module.hub_virtual_network]
   source              = "../../modules/azurerm_private_dns"
@@ -49,7 +59,7 @@ module "azurerm_firewall" {
   fw_name                = "fw-dev-hub"          
   fw_location            = "central india"
   fw_resource_group_name = "rg-hub-001"
-  fw_subnet_id           = "/subscriptions/.../subnets/AzureFirewallSubnet"
+  fw_subnet_id           = module.hub_subnets.subnet_ids["AzureFirewallSubnet"]
   tags                   = { Environment = "Dev" }
 }
 
@@ -57,12 +67,9 @@ module "azurerm_firewall" {
 module "route_table_dev" { #if trafic want go from dev vnet to hub vnet then it should go to firewall
   depends_on             = [module.hub_resource_group, module.azurerm_firewall]
   source = "../../modules/azurerm_route_table"
-
   rt_name                = "rt-dev-001"
-  rt_location            = "central india"      # RG মডিউল থেকে লোকেশন নিচ্ছে
-  rt_resource_group_name = "rg-hub-001"         # RG মডিউল থেকে নাম নিচ্ছে
-  
-  # এখানে ফায়ারওয়াল মডিউলের আউটপুট থেকে প্রাইভেট আইপি পাস হবে
+  rt_location            = "central india"      
+  rt_resource_group_name = "rg-hub-001"        
   firewall_private_ip    = module.azurerm_firewall.firewall_private_ip 
   
   tags                   = local.common_tags
