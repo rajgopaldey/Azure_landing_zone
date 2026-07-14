@@ -1,13 +1,13 @@
-
-variable "sub_name" {
-    type = string
-}
 variable "resource_group_name" {
-    type = string
+  type = string
 }
+
 variable "vnet_name" {
-    type = string
+  type = string
 }
-variable "address_prefixes" {
-    type = list(string)
+
+variable "subnets" {
+  type = map(object({
+    address_prefix = string
+  }))
 }

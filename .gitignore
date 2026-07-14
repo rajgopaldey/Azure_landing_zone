@@ -1,0 +1,19 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Terraform variable files (optional)
+*.tfvars
+
+# Sensitive files
+*.tfplan
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
