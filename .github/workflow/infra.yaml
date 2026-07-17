@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main,feature/changes ]
     paths:
-      - .github/workflows/infra.yaml
+      - .github/workflow/infra.yaml
 
 permissions:
   id-token: write
