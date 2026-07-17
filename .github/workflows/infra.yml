@@ -1,0 +1,64 @@
+name: terraform-infra-dev
+
+on:
+  push:
+    branches: [ main,feature/changes ]
+    paths:
+      - .github/workflows/infra.yml
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      ############### tf lint tools install in github runner#################
+      - name: Setup TFLint     
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      # run tflint to check for errors in the terraform code#################
+      - name: Run TFLint
+        run: |
+          tflint --init
+          tflint -f compact
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          working_directory: environment/DEV   # <-- folder setup case match kora holo
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: environment/DEV
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        working-directory: environment/DEV
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: environment/DEV
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: environment/DEV
+
+      - name: Terraform Apply
+        run: terraform apply tfplan            # <-- plan file integration context auto approve context e handle kore
+        working-directory: environment/DEV
