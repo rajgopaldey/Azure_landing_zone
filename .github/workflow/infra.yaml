@@ -3,6 +3,8 @@ name: terraform-infra-dev
 on:
   push:
     branches: [ main,feature/changes ]
+    paths:
+      - .github/workflows/infra.yaml
 
 permissions:
   id-token: write
