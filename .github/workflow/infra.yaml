@@ -2,7 +2,7 @@ name: terraform-infra-dev
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main,feature/changes ]
 
 permissions:
   id-token: write
