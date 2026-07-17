@@ -43,18 +43,18 @@ module "resource_group" {
 #   account_tier = "Standard"
 #   account_replication_type = "LRS"
 #   tags = local.common_tags
-  
+
 # }
 
 module "dev_static_web_app" {
-  depends_on = [ module.resource_group ]
-  source = "../../modules/azurerm_static_web_app"
-  stb_name = "dev-static-app"
-  stb_location = "eastasia"
+  depends_on          = [module.resource_group]
+  source              = "../../modules/azurerm_static_web_app"
+  stb_name            = "dev-static-app"
+  stb_location        = "eastasia"
   resource_group_name = "rg-dev-02"
-  sku_size = "Free"
-  sku_tier = "Free"
-  
+  sku_size            = "Free"
+  sku_tier            = "Free"
+
 }
 
 

@@ -32,7 +32,7 @@ jobs:
         with:
           tflint_version: latest
 
-      # run tflint to check for errors in the terraform code
+      # run tflint to check for errors in the terraform code#################
       - name: Run TFLint
         run: |
           tflint --init
