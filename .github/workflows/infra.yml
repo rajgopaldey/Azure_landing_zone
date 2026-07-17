@@ -26,7 +26,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      ############### tf lint tools install in github runner###############
+      ############### tf lint tools install in github runner################
       - name: Setup TFLint     
         uses: terraform-linters/setup-tflint@v4
         with:
