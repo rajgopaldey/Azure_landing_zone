@@ -5,7 +5,7 @@ on:
     branches: [ main,feature/changes ]
     paths:
       - .github/workflows/infra.yml
-
+      - environment/DEV/**
 permissions:
   id-token: write
   contents: read
