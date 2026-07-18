@@ -60,7 +60,7 @@ module "dev_static_web_app" {
 module "Dev_acr" {
   depends_on          = [module.resource_group]
   source              = "../../modules/azurerm_container_registery"
-  acr_name            = "devacr"
+  acr_name            = "acrmyapplication"
   resource_group_name = "rg-dev-02"
   location            = "central india"
 }
