@@ -3,10 +3,10 @@ name: terraform-infra-dev
 on:
   push:
     branches: [ main,feature/changes ]
-    paths:
-      - .github/workflows/infra.yml
-      - environment/DEV/**
-permissions:
+#     paths:
+#       - .github/workflows/infra.yml
+#       - environment/DEV/**
+# permissions:
   id-token: write
   contents: read
 
@@ -26,7 +26,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      ################# tf lint tools install in github runner#####################
+      ################# tf lint tools install in github runner#######################
       - name: Setup TFLint     
         uses: terraform-linters/setup-tflint@v4
         with:

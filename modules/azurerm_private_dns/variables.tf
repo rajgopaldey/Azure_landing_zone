@@ -14,3 +14,12 @@ variable "tags" {
 variable "vnet_to_link" {
   type = map(string)
 }
+
+variable "name_dns_a_record" {
+  type = string
+  
+}
+
+variable "container_app_ip"{
+  type = string
+}

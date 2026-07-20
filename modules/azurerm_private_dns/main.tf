@@ -18,3 +18,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vnet_links" {
   registration_enabled  = true # true দিলে এই VNet-এর VM-গুলো অটোমেটিক DNS রেকর্ড পেয়ে যাবে
 }
 
+resource "azurerm_private_dns_a_record" "container_app_record" {
+  name                = var.name_dns_a_record
+  zone_name           = azurerm_private_dns_zone.private_dns.name
+  resource_group_name = var.resource_group_name
+  ttl                 = 3600
+  records             = [var.container_app_ip] #if some one hit the domain,record will provide the ip
+
+}
