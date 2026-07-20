@@ -79,3 +79,6 @@ module "Dev_acr" {
 #   vnet_subnet_id      = module.subnet.subnet_ids["aks-subnet"]
 #   tags                = local.common_tags
 # }
+
+
+#
