@@ -35,28 +35,28 @@ module "resource_group" {
 #   }
 # }
 
-# # module "storage_accounr" {
-# #   depends_on = [module.resource_group]
-# #   source = "../../modules/azurerm_storage_account"
-# #   stg_name = "stgdev02989"
-# #   resource_group_name = "rg-dev-02"
-# #   location = "Central India"
-# #   account_tier = "Standard"
-# #   account_replication_type = "LRS"
-# #   tags = local.common_tags
+# module "storage_accounr" {
+#   depends_on = [module.resource_group]
+#   source = "../../modules/azurerm_storage_account"
+#   stg_name = "stgdev02989"
+#   resource_group_name = "rg-dev-02"
+#   location = "Central India"
+#   account_tier = "Standard"
+#   account_replication_type = "LRS"
+#   tags = local.common_tags
 
-# # }
+# }
 
-module "dev_static_web_app" {
-  depends_on          = [module.resource_group]
-  source              = "../../modules/azurerm_static_web_app"
-  stb_name            = "dev-static-app"
-  stb_location        = "eastasia"
-  resource_group_name = "rg-dev-02"
-  sku_size            = "Free"
-  sku_tier            = "Free"
+# module "dev_static_web_app" {
+#   depends_on          = [module.resource_group]
+#   source              = "../../modules/azurerm_static_web_app"
+#   stb_name            = "dev-static-app"
+#   stb_location        = "eastasia"
+#   resource_group_name = "rg-dev-02"
+#   sku_size            = "Free"
+#   sku_tier            = "Free"
 
-}
+# }
 
 module "Dev_acr" {
   depends_on          = [module.resource_group]
@@ -86,18 +86,18 @@ module "Dev_acr" {
 #   }
 # }
 
-# # module "aks_cluster" {
-# #   depends_on          = [module.spoke_virtual_network, module.subnet] 
-# #   source              = "../../modules/azurerm_kubernetes_cluster" # module source path
-# #   cluster_name        = "aks-dev-001"
-# #   location            = "Central India"
-# #   resource_group_name = "rg-dev-02"
-# #   dns_prefix          = "aksdev"
-# #   node_count          = 2
-# #   vm_size             = "Standard_D2s_v4" 
-# #   vnet_subnet_id      = module.subnet.subnet_ids["aks-subnet"]
-# #   tags                = local.common_tags
-# # }
+# module "aks_cluster" {
+#   depends_on          = [module.spoke_virtual_network, module.subnet] 
+#   source              = "../../modules/azurerm_kubernetes_cluster" # module source path
+#   cluster_name        = "aks-dev-001"
+#   location            = "Central India"
+#   resource_group_name = "rg-dev-02"
+#   dns_prefix          = "aksdev"
+#   node_count          = 2
+#   vm_size             = "Standard_D2s_v4" 
+#   vnet_subnet_id      = module.subnet.subnet_ids["aks-subnet"]
+#   tags                = local.common_tags
+# }
 
 
-# #
+#
