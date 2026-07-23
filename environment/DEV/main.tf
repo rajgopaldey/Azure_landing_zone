@@ -77,7 +77,7 @@ module "container_app_backend" {
   container_registry_server = module.Dev_acr.login_server # e.g. devacr01.azurecr.io
 
   # 🔑 NEW: Key Vault Secret URI
-  key_vault_secret_id       = module.key_vault.secret_versionless_id
+  key_vault_secret_id = module.key_vault.secret_versionless_id
 
 }
 

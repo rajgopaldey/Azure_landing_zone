@@ -5,7 +5,7 @@ terraform {
       version = "~> 4.0"
     }
 
-    azuread = {     #I need to register one provider in azure ad for service principle management
+    azuread = { #I need to register one provider in azure ad for service principle management
       source  = "hashicorp/azuread"
       version = "~> 2.0"
     }
