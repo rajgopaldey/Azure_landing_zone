@@ -58,13 +58,13 @@ module "resource_group" {
 
 # }
 
-module "Dev_acr" {
-  depends_on          = [module.resource_group]
-  source              = "../../modules/azurerm_container_registery"
-  acr_name            = "acrmyapplication"
-  resource_group_name = "rg-dev-02"
-  location            = "central india"
-}
+# module "Dev_acr" {
+#   depends_on          = [module.resource_group]
+#   source              = "../../modules/azurerm_container_registery"
+#   acr_name            = "acrmyapplication"
+#   resource_group_name = "rg-dev-02"
+#   location            = "central india"
+# }
 
 # module "container_app_backend" {
 #   depends_on               = [module.subnet, module.Dev_acr]
@@ -85,6 +85,33 @@ module "Dev_acr" {
 #     "spoke-vnet" = module.spoke_virtual_network.vnet_id # Tomar VNet module-er output variable output resource id name
 #   }
 # }
+
+############ Key_Vault #######################
+data "azuread_service_principal" "sp" {
+  display_name = "sp-github-terraform-dev" #eisting service principle name in azure
+}
+data "azurerm_client_config" "current" {} #standard/default built-in data source.
+
+module "key_vault" {
+  depends_on          = [module.resource_group]
+  source              = "../../modules/azurerm_key_vault"
+  key_vault_name      = "production-kv-madhav"
+  resource_group_name = "rg-dev-02" # Tomar RG Name
+  location            = "East US"   # Tomar Azure Region
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+
+  tags = {
+    Environment = "DEV"
+    ManagedBy   = "Terraform"
+  }
+}
+
+#GitHub Actions Service Principal-ke RBAC Role Assignment (Secrets Read Permision)
+resource "azurerm_role_assignment" "github_kv_access" {
+  scope                = module.key_vault.key_vault_id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = data.azuread_service_principal.sp.object_id #from service priciple data block object id is refer from serviceprinciple
+}
 
 # module "aks_cluster" {
 #   depends_on          = [module.spoke_virtual_network, module.subnet] 
