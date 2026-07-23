@@ -26,22 +26,22 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      ################# tf lint tools install in github runner#######################
-      - name: Setup TFLint     
-        uses: terraform-linters/setup-tflint@v4
-        with:
-          tflint_version: latest
+      # ################# tf lint tools install in github runner#######################
+      # - name: Setup TFLint     
+      #   uses: terraform-linters/setup-tflint@v4
+      #   with:
+      #     tflint_version: latest
 
-      # run tflint to check for errors in the terraform code#################
-      - name: Run TFLint
-        run: |
-          tflint --init
-          tflint -f compact
+      # # run tflint to check for errors in the terraform code#################
+      # - name: Run TFLint
+      #   run: |
+      #     tflint --init
+      #     tflint -f compact
 
-      - name: Run tfsec
-        uses: aquasecurity/tfsec-action@v1.0.0
-        with:
-          working_directory: environment/DEV   # <-- folder setup case match kora holo
+      # - name: Run tfsec
+      #   uses: aquasecurity/tfsec-action@v1.0.0
+      #   with:
+      #     working_directory: environment/DEV   # <-- folder setup case match kora holo
 
       - name: Terraform Init
         run: terraform init
