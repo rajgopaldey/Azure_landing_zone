@@ -12,7 +12,7 @@ resource "azurerm_container_app_environment" "aca_env" {
 
 #Container App 
 resource "azurerm_container_app" "app_container" {
-  name                         = "info-app-service"
+  name                         = var.container_app_name
   container_app_environment_id = azurerm_container_app_environment.aca_env.id
   resource_group_name          = var.resource_group_name
   revision_mode                = "Single"
@@ -20,19 +20,24 @@ resource "azurerm_container_app" "app_container" {
 #if application/container app want to access-Azure Key Vault, Database, ba Container Registry no need any psw
   identity {
     type = "SystemAssigned" #by this block create manageidentity
-  }
+  
 
   #Key Vault Secret Block (Secret fetch korar jonno)
-  secret {
-    name                = "db-secret"
-    key_vault_secret_id = var.key_vault_secret_id # Key Vault Secret Versionless URI
-    identity            = "SystemAssigned"
+  #secret { } block-ta hocche Key Vault ar Container App-er modhe bridge/connector.
+  #ata dea container app secret read korba but secret manuly push korbo 
+  #az cli de tar jono pora link dabo
+    
   }
+  # secret {
+  #   name                = "db-secret"
+  #   key_vault_secret_id = var.key_vault_secret_id # Key Vault Secret Versionless URI
+  #   identity            = "System" # 👈 FIXED: Changed from "SystemAssigned" to "System"
+  # }
 
   # 📦 ACR Registry Authentication (SystemAssigned Managed Identity via ACR Pull)
   registry {
     server   = var.container_registry_server # e.g. myacr.azurecr.io
-    identity = "SystemAssigned"
+    identity = "system" # 👈 FIXED: Changed from "SystemAssigned" to "system"
   }
 
   ingress {
@@ -54,11 +59,11 @@ resource "azurerm_container_app" "app_container" {
       cpu    = "0.25"
       memory = "0.5Gi"
 
-      # 🔑 Environment variable mapping
-      env {
-        name        = "DB_PASSWORD"
-        secret_name = "db-secret"
-      }
+      # # 🔑 Environment variable mapping
+      # env {
+      #   name        = "DB_PASSWORD"
+      #   secret_name = "db-secret"
+      # }
     }
   }
 

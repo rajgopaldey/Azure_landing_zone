@@ -67,18 +67,21 @@ module "Dev_acr" {
 }
 
 module "container_app_backend" {
-  depends_on               = [module.subnet, module.Dev_acr]
-  source                   = "../../modules/azurerm_container_app"
-  resource_group_name      = "rg-dev-02"
-  location                 = "Central India"
-  infrastructure_subnet_id = module.subnet.subnet_ids["backend-subnet"]
-  container_registry_id    = module.Dev_acr.acr_id
-  # 🚀 NEW: ACR Server URL (Image pull auth-er jonno)
-  container_registry_server = module.Dev_acr.login_server # e.g. devacr01.azurecr.io
+  depends_on = [module.subnet,
+    module.Dev_acr
+  ]
 
-  # 🔑 NEW: Key Vault Secret URI
-  key_vault_secret_id = module.key_vault.secret_versionless_id
+  source = "../../modules/azurerm_container_app"
 
+  # 🎯 Basic Details
+  container_app_name  = "dev-container-info-app" # 👈 Shudhu App-er Naam
+  resource_group_name = "rg-dev-02"
+  location            = "Central India"
+
+  # 🔗 Network & Registry
+  infrastructure_subnet_id  = module.subnet.subnet_ids["backend-subnet"]
+  container_registry_id     = module.Dev_acr.acr_id
+  container_registry_server = module.Dev_acr.login_server
 }
 
 module "dev_private_dns" {
